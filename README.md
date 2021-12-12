@@ -1,7 +1,7 @@
 # Koe-Koe-downloader
 koe-koe.com downloader<br/>
-koe-koe.com ダウンロード<br/>
-<b>The newer version saves them as {author} {title} {idOfTheAudio}, and saves the descriptions of the audios n shit in csv!!!!</b>
+koe-koe.com ダウンロード<br/></br>
+<b>The newer version saves them as {author} {title} {idOfTheAudio}, and saves the descriptions of the audios n shit in csv!!!!</b></br>
 Below this line is for the first release (just a basic downloader!)<br/>
 --------------------------------------------------------------------------
 <b>Open the program and paste the autoplay link. </b><br/>
