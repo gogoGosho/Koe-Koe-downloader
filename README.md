@@ -6,6 +6,7 @@ koe-koe.com ダウンロード</b><br/></br>
 Download audios from koe-koe.com using python. The downloaded mp3s will be saved withe the following name {authorName} {title} {idOfTheAudio}.mp3<br>
 All the extra info such as {author}{title}{lenghtAndDate}{currentDate}{descriptionOfTheAudio} is saved to a csv file<br>
 Newest version saves the files only if they have not been downloaded already<br>
+<b>YOU MUST USE THE AUTOPLAY LINK OTHERWISE IT WON'T WORK</b></br>
 Everything below is old info i'll  prolly delete it later
 <br><br><br>
 
