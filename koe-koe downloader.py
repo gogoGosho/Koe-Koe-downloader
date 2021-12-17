@@ -1,19 +1,17 @@
 from bs4 import BeautifulSoup
 import requests, re, csv, os, glob
-from datetime import datetime
+from datetime import datetime 
+# from pathlib import Path # from pathlib import Path  # enable this if you wanna have a main folder for koe-koe and this + line 36 onwards will make subfolders automatically
+
 
 # r = requests.get("<enter the autoplay link↙↙↙↙↙↙>").text
-r = requests.get(
-    "https://koe-koe.com/auto_play.php?word=%E3%81%B2%E3%81%9A%E3%81%BF&g=1"
-).text
+r = requests.get("https://koe-koe.com/auto_play.php?word=%E3%82%8C%E3%82%93&g=1").text
 dateToday = datetime.today().strftime("%Y-%m-%d")
 soup = BeautifulSoup(r, "lxml")
 empy = []
 for a in soup.find_all("a", href=True):
     empy.append(a["href"])
 nameName = empy[4]
-empy = empy[6:-16]
-rdyforregex = list(dict.fromkeys(empy))
 
 
 def listToString(s):
@@ -21,9 +19,34 @@ def listToString(s):
     return str1.join(s)
 
 
+empy2 = listToString(empy)
+empy3 = re.findall(r"\b\d{4,6}\b", empy2)
+
+
+rdyforregex = list(dict.fromkeys(empy3))
+
+
 nameName = nameName.split("=")
 nameName = nameName[1]
 author = nameName[:-3]
+
+# if you ever feel like not saving them in the current directory, change "pathtomain" to the main folder's path
+# name your main folder "Koe-Koe folder" or whatever, and this will automatically make the subfolders for each
+# new user, and will download all the missing audios from said user
+
+# pathtomain = r"shift right on a folder and click "Copy as path" "
+# pathtomain =r"D:\Koe-Koe folder" #for example
+# os.chdir(pathtomain)
+# try:
+#     if os.path.exists(f"{pathtomain}/{author}") == False:
+#         os.mkdir(f"{author}")
+#     else:
+#         pass
+# except FileExistsError as e:
+#     pass
+# newdir = Path(os.path.join(pathtomain, f"{author}"))
+# os.chdir(newdir)
+
 
 listFromTheDirectory = []
 for file in glob.glob("*.mp3"):
@@ -31,11 +54,12 @@ for file in glob.glob("*.mp3"):
 turnedtoString = listToString(listFromTheDirectory)
 listToString(turnedtoString)
 
-idsFromDirectory = re.findall(r"\d{6}", turnedtoString)
+idsFromDirectory = re.findall(r"\b\d{4,6}\b", turnedtoString)
 
 
 convertedString = listToString(rdyforregex)
-ids = re.findall(r"[0-9]+", convertedString)
+
+ids = re.findall(r"\b\d{4,6}\b", convertedString)
 if os.path.isfile(f"./{author}.csv") == False:
     outputFile = open(f"{author}.csv", "w", newline="", encoding="utf16")
     outputDictWriter = csv.DictWriter(
@@ -46,6 +70,7 @@ if os.path.isfile(f"./{author}.csv") == False:
     outputFile.close()
 
 compareOldAndNewDownloadNew = list(set(ids).difference(idsFromDirectory))
+
 lines = open(f"{author}.csv", "r", encoding="utf16").read()
 
 
@@ -56,11 +81,18 @@ for i in ids:
 
         sosoup = BeautifulSoup(furtherRequest, "lxml")
         taitoru = sosoup.find("div", {"id": "content_body"}).h2.text
-        linkkas = f"https://file.koe-koe.com/sound/upload/{i}.mp3"
-        print(f"Saving: {author} {taitoru} {i}.mp3")
-        wawawa = requests.get(linkkas)
-        open(f"{author} {taitoru} {i}.mp3", "wb").write(wawawa.content)
-        print(f"Saved: {author} {taitoru} {i}.mp3\n")
+        if int(i) > 161334:
+            linkkas = f"https://file.koe-koe.com/sound/upload/{i}.mp3"
+            print(f"Saving: {author} {taitoru} {i}.mp3")
+            wawawa = requests.get(linkkas)
+            open(f"{author}  {taitoru} [{i}].mp3", "wb").write(wawawa.content)
+            print(f"Saved: {author} {taitoru} {i}.mp3\n")
+        elif int(i) < 161334:
+            linkkas = f"https://file.koe-koe.com/sound/old/{i}.mp3"
+            print(f"Saving: {author} {taitoru} {i}.mp3")
+            wawawa = requests.get(linkkas)
+            open(f"{author}  {taitoru} [{i}].mp3", "wb").write(wawawa.content)
+            print(f"Saved: {author} {taitoru} {i}.mp3\n")
 
         try:
             lenghtAndDate = sosoup.select("#text > div:nth-child(2) > p:nth-child(2)")[
