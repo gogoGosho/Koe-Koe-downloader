@@ -80,7 +80,8 @@ for i in ids:
         furtherRequest = requests.get(linkka).text
 
         sosoup = BeautifulSoup(furtherRequest, "lxml")
-        taitoru = sosoup.find("div", {"id": "content_body"}).h2.text
+        taitaitle = sosoup.find("div", {"id": "content_body"}).h2.text
+        taitoru = re.sub(r'[\\/:"*?<>|]+', "", taitaitle)
         if int(i) > 161334:
             linkkas = f"https://file.koe-koe.com/sound/upload/{i}.mp3"
             print(f"Saving: {author} {taitoru} {i}.mp3")
